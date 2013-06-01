@@ -126,7 +126,7 @@ public class Upload extends HttpServlet {
                 contentType.contains(CONTENT_TYPE_IMG)) {
                 Path target = FileSystems.getDefault().getPath("webapps").
                     resolve("suggestiontray").
-                    resolve(String.format("%s.%s.%s", filename, teacherId,"01"));
+                    resolve(String.format("%s.%s.%s", filename, teacherId,"02"));
                 if (Files.exists(target)) {
                     response = "file-already-exists";
                     Files.delete(source);
@@ -138,7 +138,7 @@ public class Upload extends HttpServlet {
                 contentType.contains(CONTENT_TYPE_TXT)) {            
                 Path target = FileSystems.getDefault().getPath("webapps").
                     resolve("suggestiontray").
-                    resolve(String.format("%s.%s.%s", filename, teacherId, "02"));
+                    resolve(String.format("%s.%s.%s", filename, teacherId, "01"));
                 if (Files.exists(target)) {
                     response = "file-already-exists";
                     Files.delete(source);
