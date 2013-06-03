@@ -106,7 +106,9 @@ public class Upload extends HttpServlet {
                 contentType.contains(CONTENT_TYPE_IMG)) {
                 Path target = FileSystems.getDefault().getPath("webapps").
                     resolve("scantray").
-                    resolve(String.format("%s.%s", filename, EXTNSN));
+                    resolve(String.format("%s.%s", filename,
+                        contentType.contains(CONTENT_TYPE_PDF)? 
+                            UNEXPLODED: UNDETECTED));
                 if (Files.exists(target)) {
                     response = "file-already-exists";
                     Files.delete(source);
@@ -162,7 +164,8 @@ public class Upload extends HttpServlet {
         resp.getWriter().println(String.format("{\"success\": %s}", response));        
     }
     
-    private final String EXTNSN = "ue";
+    private final String UNDETECTED = "ud";
+    private final String UNEXPLODED = "ue";
     private final String CONTENT_TYPE_DOC = "document";
     private final String CONTENT_TYPE_TXT = "text";
     private final String CONTENT_TYPE_JSON = "application/json";
