@@ -122,7 +122,7 @@ public class Upload extends HttpServlet {
             }
         } else if (req.getServletPath().equals("/suggestion")) {
             String teacherId = req.getParameter("id");
-            Path source = FileSystems.getDefault().getPath("/tmp").resolve(filename);
+            Path source = FileSystems.getDefault().getPath("/tmp").resolve(filename);            
             String contentType = Files.probeContentType(source);
             if (contentType.contains(CONTENT_TYPE_PDF) ||
                 contentType.contains(CONTENT_TYPE_IMG)) {
@@ -137,7 +137,9 @@ public class Upload extends HttpServlet {
                     Files.move(source, target);
                 }
             } else if (contentType.contains(CONTENT_TYPE_DOC) ||
-                contentType.contains(CONTENT_TYPE_TXT)) {            
+                contentType.contains(CONTENT_TYPE_TXT) ||
+                contentType.contains(CONTENT_TYPE_MS_DOC) ||
+                contentType.contains(CONTENT_TYPE_DOCX)) {
                 Path target = FileSystems.getDefault().getPath("webapps").
                     resolve("suggestiontray").
                     resolve(String.format("%s.%s.%s", filename, teacherId, "01"));
@@ -166,6 +168,8 @@ public class Upload extends HttpServlet {
     
     private final String UNDETECTED = "ud";
     private final String UNEXPLODED = "ue";
+    private final String CONTENT_TYPE_MS_DOC = "msword";
+    private final String CONTENT_TYPE_DOCX = "zip";
     private final String CONTENT_TYPE_DOC = "document";
     private final String CONTENT_TYPE_TXT = "text";
     private final String CONTENT_TYPE_JSON = "application/json";
