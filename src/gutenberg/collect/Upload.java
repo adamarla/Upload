@@ -100,15 +100,16 @@ public class Upload extends HttpServlet {
         if (filename == null) {
             response = "not-ok";
         } else if (req.getServletPath().equals("/scan")) {
+            String scanId = req.getParameter("id");
             Path source = FileSystems.getDefault().getPath("/tmp").resolve(filename);
             String contentType = Files.probeContentType(source);
             if (contentType.contains(CONTENT_TYPE_PDF) ||
                 contentType.contains(CONTENT_TYPE_IMG)) {
                 Path target = FileSystems.getDefault().getPath("webapps").
                     resolve("scantray").
-                    resolve(String.format("%s.%s", filename,
-                        contentType.contains(CONTENT_TYPE_PDF)? 
-                            UNEXPLODED: UNDETECTED));
+                    resolve(String.format("%s.%s", 
+                            scanId == null ? filename: String.format("GR_%s_%s", scanId, filename),
+                            contentType.contains(CONTENT_TYPE_PDF) ? UNEXPLODED: UNDETECTED));
                 if (Files.exists(target)) {
                     response = "file-already-exists";
                     Files.delete(source);
@@ -166,8 +167,8 @@ public class Upload extends HttpServlet {
         resp.getWriter().println(String.format("{\"success\": %s}", response));        
     }
     
-    private final String UNDETECTED = "ud";
-    private final String UNEXPLODED = "ue";
+    private final String UNDETECTED = "ad";
+    private final String UNEXPLODED = "ae";
     private final String CONTENT_TYPE_MS_DOC = "msword";
     private final String CONTENT_TYPE_DOCX = "zip";
     private final String CONTENT_TYPE_DOC = "document";
