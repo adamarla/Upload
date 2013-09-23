@@ -101,7 +101,7 @@ public class Upload extends HttpServlet {
             response = "not-ok";
         } else if (req.getServletPath().equals("/scan")) {
             String scanId = req.getParameter("id") == null? "0" : req.getParameter("id");
-            String scanType = req.getParameter("type") == null? "QRC": req.getParameter("type");
+            String scanType = req.getParameter("type") == null? "QR": req.getParameter("type");
             
             Path source = FileSystems.getDefault().getPath("/tmp").resolve(filename);
             String contentType = Files.probeContentType(source);
