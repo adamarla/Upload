@@ -100,23 +100,25 @@ public class Upload extends HttpServlet {
         if (filename == null) {
             response = "not-ok";
         } else if (req.getServletPath().equals("/scan")) {
-            String scanId = req.getParameter("id");
+            String scanId = req.getParameter("id") == null? "0" : req.getParameter("id");
+            String scanType = req.getParameter("type") == null? "QRC": req.getParameter("type");
+            
             Path source = FileSystems.getDefault().getPath("/tmp").resolve(filename);
             String contentType = Files.probeContentType(source);
             if (contentType.contains(CONTENT_TYPE_PDF) ||
                 contentType.contains(CONTENT_TYPE_IMG)) {
                 Path target = FileSystems.getDefault().getPath("webapps").
                     resolve("scantray").
-                    resolve(String.format("%s.%s", 
-                            scanId == null ? filename: String.format("GR_%s_%s", scanId, filename),
+                    resolve(String.format("%s_%s_%s.%s", scanType, scanId, filename,
                             contentType.contains(CONTENT_TYPE_PDF) ? UNEXPLODED: UNDETECTED));
+                
                 if (Files.exists(target)) {
                     response = "file-already-exists";
                     Files.delete(source);
                 } else {
                     response = "true";
                     Files.move(source, target);
-                }
+                }                
             } else {
                 Files.delete(source);
                 response = "file-type-not-ok";                
