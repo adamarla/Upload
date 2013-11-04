@@ -102,7 +102,7 @@ public class Upload extends HttpServlet {
         } else if (req.getServletPath().equals("/scan")) {
             String scanId = req.getParameter("id") == null? "0" : req.getParameter("id");
             String scanType = req.getParameter("type") == null? "QR": req.getParameter("type");
-            String scanSource = req.getParameter("source") == null? "scantray": "scanashtray";
+            String scanSource = req.getParameter("staging") == null? "scantray": req.getParameter("staging");
             
             Path source = FileSystems.getDefault().getPath("/tmp").resolve(filename);
             String contentType = Files.probeContentType(source);
