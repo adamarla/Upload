@@ -102,16 +102,17 @@ public class Upload extends HttpServlet {
         } else if (req.getServletPath().equals("/scan")) {
             String scanId = req.getParameter("id") == null? "0" : req.getParameter("id");
             String scanType = req.getParameter("type") == null? "QR": req.getParameter("type");
-            String scanSource = req.getParameter("staging") == null? "scantray": req.getParameter("staging");
+            String studentId = req.getParameter("student_id") == null? "0" : req.getParameter("student_id");
+            String vers = req.getParameter("vers") == null? "0" : req.getParameter("vers");
             
             Path source = FileSystems.getDefault().getPath("/tmp").resolve(filename);
             String contentType = Files.probeContentType(source);
             if (contentType.contains(CONTENT_TYPE_PDF) ||
                 contentType.contains(CONTENT_TYPE_IMG)) {
-                Path target = FileSystems.getDefault().getPath("webapps").
-                    resolve(scanSource).
-                    resolve(String.format("%s_%s_%s.%s", scanType, scanId, filename,
-                            contentType.contains(CONTENT_TYPE_PDF) ? UNEXPLODED: UNDETECTED));                
+                Path target = FileSystems.getDefault().getPath("webapps/scantray").
+                    resolve(String.format("%s_%s_%s_%s_%s.%s",
+                        scanType, scanId, filename, studentId, vers,
+                        contentType.contains(CONTENT_TYPE_PDF) ? UNEXPLODED: UNDETECTED));                
                 if (Files.exists(target)) {
                     response = "file-already-exists";
                     Files.delete(source);
